@@ -3,8 +3,9 @@ class Find {
     this.queryData = extractedData;
     this.tableName = tableName;
 
-    this.searchParams = extractedData.params[0];
-    this.selectParams = entities.params[1];
+    console.log(extractedData)
+    this.searchParams = extractedData.params[0] || {};
+    this.selectParams = extractedData.params[1] || {};
   }
 
 
@@ -21,7 +22,7 @@ class Find {
       }
     })
 
-    return `Select from ${this.tableName} WHERE ${results.join('AND')}`;
+    return `Select ${this.selectedFields} from ${this.tableName} WHERE ${results.join('AND')};`;
   }
 
 
@@ -38,6 +39,23 @@ class Find {
     })
 
     return results.join(' AND ');
+  }
+
+  get selectedFields() {
+    const keys = Object.keys(this.selectParams);
+    const fields = [];
+
+    if(keys.length) {
+       keys.forEach(key => {
+          if(this.selectParams[key]){
+            fields.push(key);
+          }
+       })
+    } else {
+      fields.push('*');
+    }
+
+    return fields.join(', ');
   }
 }
 

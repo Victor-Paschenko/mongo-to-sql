@@ -13,7 +13,7 @@ class Extractor {
     const funcRegexp = /[a-z]*\(.*?\}\)/g;
     const funcNames = /[a-z]+(?=\()/g;
     const funcParams = /\{.*(?=\))/g;
-    const firstParamsByComma = /{.*?}+(?=.*,)/g;
+    const firstParamsByComma = /{.*?}+(?=.*,?)/g;
     const lastParamsByComma = /(?<=, ){.*?}$/g; //If there more than 2 parameters there (working just for objects)
 
     const functions = {};
