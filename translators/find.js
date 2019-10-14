@@ -1,11 +1,12 @@
 const OPERATORS = require('./constants').OPERATORS;
 const OPERATORS_EQUIVALENT = require('./constants').OPERATORS_EQUIVALENT;
+const operatorHandler = require('./operators');
 
 class Find {
   constructor(extractedData, tableName) {
     this.queryData = extractedData;
     this.tableName = tableName;
-    
+
     this.searchParams = extractedData.params[0] || {};
     this.selectParams = extractedData.params[1] || {};
   }
@@ -14,35 +15,24 @@ class Find {
   translate() {
     const keys = Object.keys(this.searchParams);
 
-    const results = keys.map(key => {
-      const value = this.searchParams[key];
-      
-      if(typeof value == 'object') {
-        return this.translation(value, key);
-      } else {
-        return `${key} = ${value}`
-      }
-    })
+    const results = keys.map(key => 
+      this.translation(this.searchParams[key], key)
+    )
 
-    return `Select ${this.selectedFields} from ${this.tableName} WHERE ${results.join('AND')};`;
+    return `Select ${this.selectedFields} from ${this.tableName} WHERE ${results.join(' AND ')};`;
   }
 
 
   translation(queryObject, varName) {
+    if(typeof queryObject !== 'object') {
+      return operatorHandler(varName, queryObject, varName).sql;
+    }
+
     const keys = Object.keys(queryObject);
 
-    const results = keys.map(key => { 
-      let result = '';
-      const value = queryObject[key];
-
-      if (OPERATORS.includes(key)) {
-         result = `${key} ${OPERATORS_EQUIVALENT[key]} ${value}`;
-      }
-
-      return result;
-    })
-
-    return results.join(' AND ');
+    return keys.map(key => 
+      operatorHandler(key, queryObject[key], varName).sql
+    ).join(' AND ');
   }
 
   get selectedFields() {
@@ -50,11 +40,13 @@ class Find {
     const fields = [];
 
     if(keys.length) {
+
        keys.forEach(key => {
           if(this.selectParams[key]){
             fields.push(key);
           }
        })
+
     } else {
       fields.push('*');
     }
