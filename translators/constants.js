@@ -1,4 +1,4 @@
-module.exports.OPERATORS_EQUIVALENT = {
+const OPERATORS_EQUIVALENT = {
   $or: "OR",
   $and: "AND",
   $in: "IN",
@@ -9,5 +9,6 @@ module.exports.OPERATORS_EQUIVALENT = {
   $ne: "<>"
 }
 
+module.exports.OPERATORS_EQUIVALENT = OPERATORS_EQUIVALENT;
 module.exports.OPERATORS = Object.keys(OPERATORS_EQUIVALENT);
 module.exports.COMPLEX_OPERATORS = ['$or', '$in'];

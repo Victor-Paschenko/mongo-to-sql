@@ -1,9 +1,11 @@
+const OPERATORS = require('./constants').OPERATORS;
+const OPERATORS_EQUIVALENT = require('./constants').OPERATORS_EQUIVALENT;
+
 class Find {
   constructor(extractedData, tableName) {
     this.queryData = extractedData;
     this.tableName = tableName;
 
-    console.log(extractedData)
     this.searchParams = extractedData.params[0] || {};
     this.selectParams = extractedData.params[1] || {};
   }
@@ -36,6 +38,8 @@ class Find {
       if (OPERATORS.includes(key)) {
          result = `${key} ${OPERATORS_EQUIVALENT[key]} ${value}`;
       }
+
+      return result;
     })
 
     return results.join(' AND ');
