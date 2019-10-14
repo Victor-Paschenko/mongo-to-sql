@@ -5,7 +5,7 @@ class Find {
   constructor(extractedData, tableName) {
     this.queryData = extractedData;
     this.tableName = tableName;
-
+    
     this.searchParams = extractedData.params[0] || {};
     this.selectParams = extractedData.params[1] || {};
   }
