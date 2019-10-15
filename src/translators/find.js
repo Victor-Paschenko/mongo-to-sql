@@ -7,15 +7,16 @@ class Find {
     this.queryData = extractedData;
     this.tableName = tableName;
 
-    this.searchParams = extractedData.params[0] || {};
-    this.selectParams = extractedData.params[1] || {};
+    this.searchParams = extractedData.params[0] || {}; //Find query params
+    this.selectParams = extractedData.params[1] || {}; //Find selected fields
   }
 
-
   translate() {
-    const keys = Object.keys(this.searchParams);
-    const results = keys.map(key => this.translation(this.searchParams[key], key));
     const selectScript = `SELECT ${this.selectedFields} FROM ${this.tableName}`;
+
+    const keys = Object.keys(this.searchParams);
+    const results = keys.map(key => 
+      this.translation(this.searchParams[key], key));
 
     if(!results.length) {
       return `${selectScript};`;
@@ -24,7 +25,9 @@ class Find {
     return `${selectScript} WHERE ${results.join(' AND ')};`;
   }
 
-
+  // operatorHandler is responsible for returning correct operator translation from mongo to sql
+  // but in order to leave operatorHandler simple in order to apply it in other places there is an pre-processing
+  // of all query parameters
   translation(queryObject, varName) {
     if(typeof queryObject !== 'object') {
       return operatorHandler(varName, queryObject, varName).sql;
@@ -33,10 +36,7 @@ class Find {
     if(queryObject instanceof Array) {
       const results = queryObject.map(query => {
         const keys = Object.keys(query);
-
-        return keys.map(key => 
-          this.translation(query[key], key)
-        )
+        return keys.map(key => this.translation(query[key], key));
       });
 
       return operatorHandler(varName, results, varName).sql;
@@ -57,8 +57,7 @@ class Find {
           if(this.selectParams[key]){
             fields.push(key);
           }
-       })
-
+       });
     } else {
       fields.push('*');
     }

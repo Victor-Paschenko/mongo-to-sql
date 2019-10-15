@@ -7,7 +7,7 @@ const OPERATORS_EQUIVALENT = {
   $gt: ">",
   $gte: ">=",
   $ne: "<>"
-}
+};
 
 module.exports.OPERATORS_EQUIVALENT = OPERATORS_EQUIVALENT;
 module.exports.OPERATORS = Object.keys(OPERATORS_EQUIVALENT);

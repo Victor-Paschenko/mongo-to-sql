@@ -1,6 +1,6 @@
 const assert = require('assert');
 const Extractor = require('../../src/extractors/extractor');
-const mocks = require('../mocks');
+const stubs = require('../stubs');
 
 describe('Extractor', () => {
 
@@ -24,7 +24,7 @@ describe('Extractor', () => {
         }
       };
 
-      assert.deepStrictEqual(new Extractor(mocks.SIMPLE_QUERY).parse(), expectedResult);
+      assert.deepStrictEqual(new Extractor(stubs.SIMPLE_QUERY).parse(), expectedResult);
 
       expectedResult = { 
         find: { 
@@ -33,7 +33,7 @@ describe('Extractor', () => {
         }
       };
 
-      assert.deepStrictEqual(new Extractor(mocks.SIMPLE_QUERY_WITH_SELECT).parse(), expectedResult);
+      assert.deepStrictEqual(new Extractor(stubs.SIMPLE_QUERY_WITH_SELECT).parse(), expectedResult);
 
       expectedResult = { 
         find: { 
@@ -48,7 +48,7 @@ describe('Extractor', () => {
         }
       };
 
-      assert.deepStrictEqual(new Extractor(mocks.SIMPLE_QUERY_WITH_SELECT_AND_OPERATOR_$OR).parse(), expectedResult);
+      assert.deepStrictEqual(new Extractor(stubs.SIMPLE_QUERY_WITH_SELECT_AND_OPERATOR_$OR).parse(), expectedResult);
     });
   });
 

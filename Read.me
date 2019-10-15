@@ -1,0 +1,6 @@
+This project was written on nodejs v 10.16.
+
+In order to run query from terminal, please type in the root directory:
+
+QUERY="db.user.find({_id: {\$in: [1,2,3]}, \$or: [ {age: {\$gte: 18, \$lte: 99}}, {name: { \$in : ['duck', 'scrudge']}} ]}, {name: 1, age: 1}).limit.group(5);" node index.js
+

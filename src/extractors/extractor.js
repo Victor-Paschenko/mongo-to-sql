@@ -4,6 +4,12 @@ const extractObjectsFromString = require('../utils').extractObjectsFromString;
 const FUNCTION_REGEXP = /[a-z]*\(.*?\}\)/g;
 const FUNCTION_NAME_REGEXP = /[a-z]+(?=\()/g;
 const EXTRACT_FUNCTION_PARAMS = /\{.*(?=\))/g;
+const FIND_DEFAULT = {
+        find: {
+          params: [],
+          functionQuery: 'find()'
+        }
+      };
 
 class Extractor {
   constructor(query) {
@@ -19,12 +25,7 @@ class Extractor {
     
     if(!this.query.match(FUNCTION_REGEXP)){
       //hack #1
-      return {
-        find: {
-          params: [],
-          functionQuery: 'find()'
-        }
-      }
+      return FIND_DEFAULT;
     }
 
     this.query.match(FUNCTION_REGEXP).forEach(functionQuery => {
