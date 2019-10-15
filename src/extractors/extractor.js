@@ -24,7 +24,6 @@ class Extractor {
     const functions = {};
     
     if(!this.query.match(FUNCTION_REGEXP)){
-      //hack #1
       return FIND_DEFAULT;
     }
 
