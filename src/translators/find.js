@@ -14,12 +14,14 @@ class Find {
 
   translate() {
     const keys = Object.keys(this.searchParams);
+    const results = keys.map(key => this.translation(this.searchParams[key], key));
+    const selectScript = `SELECT ${this.selectedFields} FROM ${this.tableName}`;
 
-    const results = keys.map(key => 
-      this.translation(this.searchParams[key], key)
-    )
+    if(!results.length) {
+      return `${selectScript};`;
+    }
 
-    return `Select ${this.selectedFields} from ${this.tableName} WHERE ${results.join(' AND ')};`;
+    return `${selectScript} WHERE ${results.join(' AND ')};`;
   }
 
 
@@ -51,7 +53,6 @@ class Find {
     const fields = [];
 
     if(keys.length) {
-
        keys.forEach(key => {
           if(this.selectParams[key]){
             fields.push(key);

@@ -1,9 +1,8 @@
 const Operator = require('./operator');
 
 class EqualOperator extends Operator{
-
   get sql() {
-    return `${this.fieldName} = ${this.value}`;
+    return `${this.fieldName} = ${this.wrapValue(this.value)}`;
   }
 }
 

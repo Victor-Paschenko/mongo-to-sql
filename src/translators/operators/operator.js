@@ -7,6 +7,13 @@ class Operator {
     this.fieldName = varName;
   }
 
+  wrapValue(value) {
+    if (typeof value === 'string') {
+      return `'${value}'`
+    }
+    return value;
+  }
+
   get sql() {
     return `${this.fieldName} ${OPERATORS_EQUIVALENT[this.operator]} ${this.value}`;
   }

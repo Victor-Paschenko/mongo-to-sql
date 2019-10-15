@@ -1,6 +1,10 @@
 const JSON5 = require('json5');
 const extractObjectsFromString = require('../utils').extractObjectsFromString;
 
+const FUNCTION_REGEXP = /[a-z]*\(.*?\}\)/g;
+const FUNCTION_NAME_REGEXP = /[a-z]+(?=\()/g;
+const EXTRACT_FUNCTION_PARAMS = /\{.*(?=\))/g;
+
 class Extractor {
   constructor(query) {
     this.query = query;
@@ -11,15 +15,21 @@ class Extractor {
   }
 
   parse() {
-    const funcRegexp = /[a-z]*\(.*?\}\)/g;
-    const funcNames = /[a-z]+(?=\()/g;
-    const funcParams = /\{.*(?=\))/g;
-
     const functions = {};
     
-    this.query.match(funcRegexp).forEach(functionQuery => {
-      const names = functionQuery.match(funcNames);
-      const paramsString = functionQuery.match(funcParams)[0].replace(/\s+/g, ' ');
+    if(!this.query.match(FUNCTION_REGEXP)){
+      //hack #1
+      return {
+        find: {
+          params: [],
+          functionQuery: 'find()'
+        }
+      }
+    }
+
+    this.query.match(FUNCTION_REGEXP).forEach(functionQuery => {
+      const names = functionQuery.match(FUNCTION_NAME_REGEXP);
+      const paramsString = functionQuery.match(EXTRACT_FUNCTION_PARAMS)[0].replace(/\s+/g, ' ');
       const params = extractObjectsFromString(paramsString);
       
       functions[names] = {
@@ -33,7 +43,7 @@ class Extractor {
 
   validate(listOfCommands) {
     if(listOfCommands.length < 3) {
-      throw 'Incorrect query structure';
+      throw new Error('Incorrect query structure');
     }
   }
 }
