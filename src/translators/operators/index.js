@@ -4,6 +4,8 @@ const OrOperator = require('./orOperator');
 const EqualOperator = require('./equalOperator');
 const OPERATORS = require('../constants').OPERATORS;
 
+// Each operator is responsible for it own mongo db operator
+// If we want add another operator to the system, here should be added new class 
 module.exports = (operator, value, varName) => {
   if(!OPERATORS.includes(operator)) {
     return new EqualOperator(varName, operator, value);

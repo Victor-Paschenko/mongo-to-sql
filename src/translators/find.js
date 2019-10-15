@@ -18,6 +18,7 @@ class Find {
     const results = keys.map(key => 
       this.translation(this.searchParams[key], key));
 
+// If there is no any parameters we should select required fields or just all 
     if(!results.length) {
       return `${selectScript};`;
     }
