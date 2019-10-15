@@ -22,8 +22,6 @@ class Extractor {
       const paramsString = functionQuery.match(funcParams)[0].replace(/\s+/g, ' ');
       const params = extractObjectsFromString(paramsString);
       
-      debugger
-      
       functions[names] = {
         functionQuery,
         params: params.map(p => JSON5.parse(p))

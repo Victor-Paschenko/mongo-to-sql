@@ -28,8 +28,19 @@ class Find {
       return operatorHandler(varName, queryObject, varName).sql;
     }
 
-    const keys = Object.keys(queryObject);
+    if(queryObject instanceof Array) {
+      const results = queryObject.map(query => {
+        const keys = Object.keys(query);
 
+        return keys.map(key => 
+          this.translation(query[key], key)
+        )
+      });
+
+      return operatorHandler(varName, results, varName).sql;
+    }
+
+    const keys = Object.keys(queryObject);
     return keys.map(key => 
       operatorHandler(key, queryObject[key], varName).sql
     ).join(' AND ');
